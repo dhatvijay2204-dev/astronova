@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AstraNova</string>
+    <string name="notification_channel_name">தினசரி உறுதிமொழிகள்</string>
+    <string name="notification_channel_desc">நீங்கள் தேர்ந்தெடுத்த நேரத்தில் தினசரி ஜோதிட உறுதிமொழிகள்.</string>
+</resources>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AstraNova</string>
+    <string name="notification_channel_name">দৈনিক ইতিবাচক বাণী</string>
+    <string name="notification_channel_desc">আপনার নির্ধারিত সময়ে ব্যক্তিগত রাশিফল বাণী।</string>
+</resources>

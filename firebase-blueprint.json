@@ -1,0 +1,237 @@
+{
+  "entities": {
+    "UserAstrologyProfile": {
+      "title": "UserAstrologyProfile",
+      "description": "Personal astrological birth details and daily affirmation notification preferences for a user.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated Firebase UID owning this profile."
+        },
+        "fullName": {
+          "type": "string",
+          "description": "User's preferred name for personalized horoscopes and affirmations."
+        },
+        "birthDate": {
+          "type": "string",
+          "description": "Birth date in YYYY-MM-DD format."
+        },
+        "birthTime": {
+          "type": "string",
+          "description": "Birth time in HH:mm format or 'Unknown'."
+        },
+        "birthPlace": {
+          "type": "string",
+          "description": "Birth city and country."
+        },
+        "zodiacSign": {
+          "type": "string",
+          "description": "Sun zodiac sign derived from birthDate."
+        },
+        "element": {
+          "type": "string",
+          "enum": ["Fire", "Earth", "Air", "Water"],
+          "description": "Astrological element of the user's sun sign."
+        },
+        "focusArea": {
+          "type": "string",
+          "description": "Primary life focus area for predictions and affirmations."
+        },
+        "notificationsEnabled": {
+          "type": "boolean",
+          "description": "Whether daily affirmation push notifications are enabled."
+        },
+        "notificationHour": {
+          "type": "integer",
+          "description": "Preferred daily affirmation notification hour (0-23)."
+        },
+        "notificationMinute": {
+          "type": "integer",
+          "description": "Preferred daily affirmation notification minute (0-59)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when created (clients submit FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when updated (clients submit FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "fullName",
+        "birthDate",
+        "birthTime",
+        "birthPlace",
+        "zodiacSign",
+        "element",
+        "focusArea",
+        "notificationsEnabled",
+        "notificationHour",
+        "notificationMinute",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "HoroscopeReading": {
+      "title": "HoroscopeReading",
+      "description": "AI-generated daily or monthly horoscope reading tailored to the user's birth profile.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "periodType": { "type": "string", "enum": ["daily", "monthly"] },
+        "periodKey": { "type": "string" },
+        "zodiacSign": { "type": "string" },
+        "headline": { "type": "string" },
+        "overview": { "type": "string" },
+        "loveInsight": { "type": "string" },
+        "careerInsight": { "type": "string" },
+        "wellnessInsight": { "type": "string" },
+        "luckyNumber": { "type": "integer" },
+        "luckyColor": { "type": "string" },
+        "powerPlanet": { "type": "string" },
+        "cosmicScore": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId",
+        "periodType",
+        "periodKey",
+        "zodiacSign",
+        "headline",
+        "overview",
+        "loveInsight",
+        "careerInsight",
+        "wellnessInsight",
+        "luckyNumber",
+        "luckyColor",
+        "powerPlanet",
+        "cosmicScore",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "DailyAffirmation": {
+      "title": "DailyAffirmation",
+      "description": "Personalized daily affirmation and mindful ritual generated for the user.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "dateKey": { "type": "string" },
+        "text": { "type": "string" },
+        "ritualPrompt": { "type": "string" },
+        "zodiacSign": { "type": "string" },
+        "focusArea": { "type": "string" },
+        "isFavorite": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId",
+        "dateKey",
+        "text",
+        "ritualPrompt",
+        "zodiacSign",
+        "focusArea",
+        "isFavorite",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "BirthChartReading": {
+      "title": "BirthChartReading",
+      "description": "Personalized natal birth chart with planetary placements and meanings.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "birthDate": { "type": "string" },
+        "birthTime": { "type": "string" },
+        "birthPlace": { "type": "string" },
+        "sunSign": { "type": "string" },
+        "moonSign": { "type": "string" },
+        "risingSign": { "type": "string" },
+        "chartSummary": { "type": "string" },
+        "placements": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId",
+        "fullName",
+        "birthDate",
+        "birthTime",
+        "birthPlace",
+        "sunSign",
+        "moonSign",
+        "risingSign",
+        "chartSummary",
+        "placements",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "CompatibilityReading": {
+      "title": "CompatibilityReading",
+      "description": "Zodiac sign compatibility analysis across romantic, platonic, and professional dimensions.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "signOne": { "type": "string" },
+        "signTwo": { "type": "string" },
+        "relationshipType": { "type": "string", "enum": ["Romantic", "Platonic", "Professional"] },
+        "overallScore": { "type": "integer" },
+        "romanticScore": { "type": "integer" },
+        "platonicScore": { "type": "integer" },
+        "professionalScore": { "type": "integer" },
+        "summary": { "type": "string" },
+        "strengths": { "type": "string" },
+        "challenges": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId",
+        "signOne",
+        "signTwo",
+        "relationshipType",
+        "overallScore",
+        "romanticScore",
+        "platonicScore",
+        "professionalScore",
+        "summary",
+        "strengths",
+        "challenges",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserAstrologyProfile" },
+      "description": "Per-user astrology birth profile and notification preferences."
+    },
+    "/users/{userId}/horoscopes/{readingId}": {
+      "schema": { "$ref": "#/entities/HoroscopeReading" },
+      "description": "Saved daily and monthly horoscope readings for the user."
+    },
+    "/users/{userId}/affirmations/{affirmationId}": {
+      "schema": { "$ref": "#/entities/DailyAffirmation" },
+      "description": "Personalized daily affirmations and saved vault entries for the user."
+    },
+    "/users/{userId}/birthCharts/{chartId}": {
+      "schema": { "$ref": "#/entities/BirthChartReading" },
+      "description": "Generated natal birth charts with planetary placements and interpretations."
+    },
+    "/users/{userId}/compatibilities/{compatId}": {
+      "schema": { "$ref": "#/entities/CompatibilityReading" },
+      "description": "Saved zodiac compatibility analyses for pairs of signs."
+    }
+  }
+}

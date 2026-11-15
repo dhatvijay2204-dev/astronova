@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AstraNova</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_out">Sign out</string>
+    <string name="tab_horoscope">Horoscope</string>
+    <string name="tab_birth_chart">Birth Chart</string>
+    <string name="tab_compatibility">Compatibility</string>
+    <string name="tab_affirmations">Affirmations</string>
+    <string name="notification_channel_name">Daily Affirmations</string>
+    <string name="notification_channel_desc">Personalized celestial affirmations delivered at your chosen time.</string>
+</resources>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AstraNova</string>
+    <string name="notification_channel_name">రోజువారీ శుభ వాక్యాలు</string>
+    <string name="notification_channel_desc">మీరు ఎంచుకున్న సమయంలో రోజువారీ జ్యోతిష్య సూక్తులు.</string>
+</resources>

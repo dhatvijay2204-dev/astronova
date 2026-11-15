@@ -1,0 +1,6 @@
+{
+  "name": "AstraNova",
+  "description": "Personalized astrology app with AI-crafted daily and monthly horoscopes, tailored daily affirmations, and scheduled push notifications based on your birth details.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

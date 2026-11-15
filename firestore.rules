@@ -1,0 +1,297 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidUserProfile(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.fullName is string && data.fullName.size() >= 1 && data.fullName.size() <= 60 &&
+             data.birthDate is string && data.birthDate.size() == 10 && data.birthDate.matches('^\\d{4}-\\d{2}-\\d{2}$') &&
+             data.birthTime is string && data.birthTime.size() >= 1 && data.birthTime.size() <= 20 &&
+             data.birthPlace is string && data.birthPlace.size() >= 1 && data.birthPlace.size() <= 100 &&
+             data.zodiacSign is string && data.zodiacSign.size() >= 3 && data.zodiacSign.size() <= 20 &&
+             data.element in ['Fire', 'Earth', 'Air', 'Water'] &&
+             data.focusArea is string && data.focusArea.size() >= 1 && data.focusArea.size() <= 50 &&
+             data.notificationsEnabled is bool &&
+             data.notificationHour is int && data.notificationHour >= 0 && data.notificationHour <= 23 &&
+             data.notificationMinute is int && data.notificationMinute >= 0 && data.notificationMinute <= 59;
+    }
+
+    function isValidHoroscopeReading(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.periodType in ['daily', 'monthly'] &&
+             data.periodKey is string && data.periodKey.size() >= 7 && data.periodKey.size() <= 10 &&
+             data.zodiacSign is string && data.zodiacSign.size() >= 3 && data.zodiacSign.size() <= 20 &&
+             data.headline is string && data.headline.size() >= 1 && data.headline.size() <= 200 &&
+             data.overview is string && data.overview.size() >= 1 && data.overview.size() <= 3000 &&
+             data.loveInsight is string && data.loveInsight.size() >= 1 && data.loveInsight.size() <= 1000 &&
+             data.careerInsight is string && data.careerInsight.size() >= 1 && data.careerInsight.size() <= 1000 &&
+             data.wellnessInsight is string && data.wellnessInsight.size() >= 1 && data.wellnessInsight.size() <= 1000 &&
+             data.luckyNumber is int && data.luckyNumber >= 1 && data.luckyNumber <= 99 &&
+             data.luckyColor is string && data.luckyColor.size() >= 1 && data.luckyColor.size() <= 40 &&
+             data.powerPlanet is string && data.powerPlanet.size() >= 1 && data.powerPlanet.size() <= 40 &&
+             data.cosmicScore is int && data.cosmicScore >= 1 && data.cosmicScore <= 100;
+    }
+
+    function isValidDailyAffirmation(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.dateKey is string && data.dateKey.size() == 10 && data.dateKey.matches('^\\d{4}-\\d{2}-\\d{2}$') &&
+             data.text is string && data.text.size() >= 1 && data.text.size() <= 600 &&
+             data.ritualPrompt is string && data.ritualPrompt.size() >= 1 && data.ritualPrompt.size() <= 600 &&
+             data.zodiacSign is string && data.zodiacSign.size() >= 3 && data.zodiacSign.size() <= 20 &&
+             data.focusArea is string && data.focusArea.size() >= 1 && data.focusArea.size() <= 50 &&
+             data.isFavorite is bool;
+    }
+
+    function isValidBirthChartReading(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.fullName is string && data.fullName.size() >= 1 && data.fullName.size() <= 60 &&
+             data.birthDate is string && data.birthDate.size() == 10 && data.birthDate.matches('^\\d{4}-\\d{2}-\\d{2}$') &&
+             data.birthTime is string && data.birthTime.size() >= 1 && data.birthTime.size() <= 20 &&
+             data.birthPlace is string && data.birthPlace.size() >= 1 && data.birthPlace.size() <= 100 &&
+             data.sunSign is string && data.sunSign.size() >= 3 && data.sunSign.size() <= 20 &&
+             data.moonSign is string && data.moonSign.size() >= 3 && data.moonSign.size() <= 20 &&
+             data.risingSign is string && data.risingSign.size() >= 3 && data.risingSign.size() <= 20 &&
+             data.chartSummary is string && data.chartSummary.size() >= 1 && data.chartSummary.size() <= 2500 &&
+             data.placements is list && data.placements.size() >= 1 && data.placements.size() <= 12 &&
+             data.placements[0] is map;
+    }
+
+    function isValidCompatibilityReading(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.signOne is string && data.signOne.size() >= 3 && data.signOne.size() <= 20 &&
+             data.signTwo is string && data.signTwo.size() >= 3 && data.signTwo.size() <= 20 &&
+             data.relationshipType in ['Romantic', 'Platonic', 'Professional'] &&
+             data.overallScore is int && data.overallScore >= 1 && data.overallScore <= 100 &&
+             data.romanticScore is int && data.romanticScore >= 1 && data.romanticScore <= 100 &&
+             data.platonicScore is int && data.platonicScore >= 1 && data.platonicScore <= 100 &&
+             data.professionalScore is int && data.professionalScore >= 1 && data.professionalScore <= 100 &&
+             data.summary is string && data.summary.size() >= 1 && data.summary.size() <= 2000 &&
+             data.strengths is string && data.strengths.size() >= 1 && data.strengths.size() <= 1000 &&
+             data.challenges is string && data.challenges.size() >= 1 && data.challenges.size() <= 1000;
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow list: if isOwner(userId);
+
+      allow create: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       incoming().keys().hasAll([
+                         'userId', 'fullName', 'birthDate', 'birthTime', 'birthPlace',
+                         'zodiacSign', 'element', 'focusArea', 'notificationsEnabled',
+                         'notificationHour', 'notificationMinute', 'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'userId', 'fullName', 'birthDate', 'birthTime', 'birthPlace',
+                         'zodiacSign', 'element', 'focusArea', 'notificationsEnabled',
+                         'notificationHour', 'notificationMinute', 'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().createdAt is timestamp &&
+                       incoming().createdAt <= request.time &&
+                       incoming().updatedAt is timestamp &&
+                       incoming().updatedAt <= request.time &&
+                       isValidUserProfile(incoming());
+
+      allow update: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       isValidUserProfile(incoming()) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().updatedAt is timestamp &&
+                       incoming().updatedAt <= request.time &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'fullName', 'birthDate', 'birthTime', 'birthPlace',
+                         'zodiacSign', 'element', 'focusArea', 'notificationsEnabled',
+                         'notificationHour', 'notificationMinute', 'updatedAt'
+                       ]);
+
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      match /horoscopes/{readingId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(readingId);
+        allow list: if isOwner(userId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(readingId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'periodType', 'periodKey', 'zodiacSign',
+                           'headline', 'overview', 'loveInsight', 'careerInsight',
+                           'wellnessInsight', 'luckyNumber', 'luckyColor', 'powerPlanet',
+                           'cosmicScore', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'periodType', 'periodKey', 'zodiacSign',
+                           'headline', 'overview', 'loveInsight', 'careerInsight',
+                           'wellnessInsight', 'luckyNumber', 'luckyColor', 'powerPlanet',
+                           'cosmicScore', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().createdAt is timestamp &&
+                         incoming().createdAt <= request.time &&
+                         incoming().updatedAt is timestamp &&
+                         incoming().updatedAt <= request.time &&
+                         isValidHoroscopeReading(incoming());
+
+        allow update: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(readingId) &&
+                         isValidHoroscopeReading(incoming()) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().updatedAt is timestamp &&
+                         incoming().updatedAt <= request.time &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'periodType', 'periodKey', 'zodiacSign', 'headline', 'overview',
+                           'loveInsight', 'careerInsight', 'wellnessInsight', 'luckyNumber',
+                           'luckyColor', 'powerPlanet', 'cosmicScore', 'updatedAt'
+                         ]);
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(readingId);
+      }
+
+      match /affirmations/{affirmationId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(affirmationId);
+        allow list: if isOwner(userId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(affirmationId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'dateKey', 'text', 'ritualPrompt',
+                           'zodiacSign', 'focusArea', 'isFavorite', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'dateKey', 'text', 'ritualPrompt',
+                           'zodiacSign', 'focusArea', 'isFavorite', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().createdAt is timestamp &&
+                         incoming().createdAt <= request.time &&
+                         incoming().updatedAt is timestamp &&
+                         incoming().updatedAt <= request.time &&
+                         isValidDailyAffirmation(incoming());
+
+        allow update: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(affirmationId) &&
+                         isValidDailyAffirmation(incoming()) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().updatedAt is timestamp &&
+                         incoming().updatedAt <= request.time &&
+                         (
+                           incoming().diff(existing()).affectedKeys().hasOnly(['isFavorite', 'updatedAt']) ||
+                           incoming().diff(existing()).affectedKeys().hasOnly([
+                             'dateKey', 'text', 'ritualPrompt', 'zodiacSign',
+                             'focusArea', 'isFavorite', 'updatedAt'
+                           ])
+                         );
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(affirmationId);
+      }
+
+      match /birthCharts/{chartId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(chartId);
+        allow list: if isOwner(userId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(chartId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'fullName', 'birthDate', 'birthTime', 'birthPlace',
+                           'sunSign', 'moonSign', 'risingSign', 'chartSummary',
+                           'placements', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'fullName', 'birthDate', 'birthTime', 'birthPlace',
+                           'sunSign', 'moonSign', 'risingSign', 'chartSummary',
+                           'placements', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().createdAt is timestamp &&
+                         incoming().createdAt <= request.time &&
+                         incoming().updatedAt is timestamp &&
+                         incoming().updatedAt <= request.time &&
+                         isValidBirthChartReading(incoming());
+
+        allow update: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(chartId) &&
+                         isValidBirthChartReading(incoming()) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().updatedAt is timestamp &&
+                         incoming().updatedAt <= request.time &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'fullName', 'birthDate', 'birthTime', 'birthPlace',
+                           'sunSign', 'moonSign', 'risingSign', 'chartSummary',
+                           'placements', 'updatedAt'
+                         ]);
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(chartId);
+      }
+
+      match /compatibilities/{compatId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(compatId);
+        allow list: if isOwner(userId);
+
+        allow create: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(compatId) &&
+                         incoming().keys().hasAll([
+                           'userId', 'signOne', 'signTwo', 'relationshipType',
+                           'overallScore', 'romanticScore', 'platonicScore', 'professionalScore',
+                           'summary', 'strengths', 'challenges', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'userId', 'signOne', 'signTwo', 'relationshipType',
+                           'overallScore', 'romanticScore', 'platonicScore', 'professionalScore',
+                           'summary', 'strengths', 'challenges', 'createdAt', 'updatedAt'
+                         ]) &&
+                         incoming().createdAt is timestamp &&
+                         incoming().createdAt <= request.time &&
+                         incoming().updatedAt is timestamp &&
+                         incoming().updatedAt <= request.time &&
+                         isValidCompatibilityReading(incoming());
+
+        allow update: if isOwner(userId) &&
+                         isValidId(userId) &&
+                         isValidId(compatId) &&
+                         isValidCompatibilityReading(incoming()) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().updatedAt is timestamp &&
+                         incoming().updatedAt <= request.time &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'signOne', 'signTwo', 'relationshipType',
+                           'overallScore', 'romanticScore', 'platonicScore', 'professionalScore',
+                           'summary', 'strengths', 'challenges', 'updatedAt'
+                         ]);
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(compatId);
+      }
+    }
+  }
+}

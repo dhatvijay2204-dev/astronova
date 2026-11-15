@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AstraNova</string>
+    <string name="notification_channel_name">दैनिक सकारात्मक संकल्प</string>
+    <string name="notification_channel_desc">आपके चुने हुए समय पर व्यक्तिगत ज्योतिषीय संकल्प।</string>
+</resources>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AstraNova</string>
+    <string name="notification_channel_name">Affirmations Quotidiennes</string>
+    <string name="notification_channel_desc">Affirmations astrologiques personnalisées à l\'heure choisie.</string>
+</resources>
